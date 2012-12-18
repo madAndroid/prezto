@@ -79,9 +79,9 @@ key_info=(
   'F11'       "$terminfo[kf11]"
   'F12'       "$terminfo[kf12]"
   'Insert'    "$terminfo[kich1]"
-  'Home'      "$terminfo[khome]"
+  'Home'      "^[[1~"
   'PageUp'    "$terminfo[kpp]"
-  'End'       "$terminfo[kend]"
+  'End'       "^[[4~"
   'PageDown'  "$terminfo[knp]"
   'Up'        "$terminfo[kcuu1]"
   'Left'      "$terminfo[kcub1]"
@@ -94,11 +94,12 @@ key_info=(
 for key in "${(k)key_info[@]}"; do
   if [[ -z "$key_info[$key]" ]]; then
     print "prezto: one or more keys are non-bindable" >&2
+    print $key
     unset key{,_info}
     return 1
   fi
 done
-
+#
 #
 # External Editor
 #
@@ -227,6 +228,12 @@ zle -N prepend-sudo
 # Reset to default key bindings.
 bindkey -d
 
+bindkey '^[[5D' emacs-backward-word
+bindkey '^[[5C' emacs-forward-word
+
+bindkey ';5D' emacs-backward-word
+bindkey ';5C' emacs-forward-word
+
 #
 # Emacs Key Bindings
 #
@@ -235,6 +242,13 @@ for key ("$key_info[Escape]"{B,b}) bindkey -M emacs "$key" emacs-backward-word
 for key ("$key_info[Escape]"{F,f}) bindkey -M emacs "$key" emacs-forward-word
 bindkey -M emacs "$key_info[Escape]$key_info[Left]" emacs-backward-word
 bindkey -M emacs "$key_info[Escape]$key_info[Right]" emacs-forward-word
+
+bindkey -M emacs '^[[5D' emacs-backward-word
+bindkey -M emacs '^[[5C' emacs-forward-word
+
+bindkey -M emacs ';5D' emacs-backward-word
+bindkey -M emacs ';5C' emacs-forward-word
+
 
 # Kill to the beginning of the line.
 for key in "$key_info[Escape]"{K,k}
@@ -287,10 +301,14 @@ fi
 #
 
 for keymap in 'emacs' 'viins'; do
+
+  bindkey -M "$keymap" '^[[1;5D' emacs-backward-word
+  bindkey -M "$keymap" '^[[1;5C' emacs-forward-word
+
   bindkey -M "$keymap" "$key_info[Home]" beginning-of-line
   bindkey -M "$keymap" "$key_info[End]" end-of-line
 
-  bindkey -M "$keymap" "$key_info[Insert]" overwrite-mode
+#  bindkey -M "$keymap" "$key_info[Insert]" overwrite-mode
   bindkey -M "$keymap" "$key_info[Delete]" delete-char
   bindkey -M "$keymap" "$key_info[Backspace]" backward-delete-char
 
@@ -316,7 +334,7 @@ for keymap in 'emacs' 'viins'; do
     bindkey -M "$keymap" "$key" push-line-or-edit
 
   # Bind Shift + Tab to go to the previous menu item.
-  bindkey -M "$keymap" "$key_info[BackTab]" reverse-menu-complete
+#  bindkey -M "$keymap" "$key_info[BackTab]" reverse-menu-complete
 
   # Complete in the middle of word.
   bindkey -M "$keymap" "$key_info[Control]I" expand-or-complete

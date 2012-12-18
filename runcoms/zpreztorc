@@ -27,11 +27,15 @@ zstyle ':prezto:load' pmodule \
   'environment' \
   'terminal' \
   'editor' \
+  'screen' \
   'history' \
   'directory' \
   'spectrum' \
   'utility' \
   'completion' \
+  'git' \
+  'python' \
+  'ruby' \
   'prompt'
 
 #
@@ -78,8 +82,9 @@ zstyle ':prezto:module:prompt' theme 'sorin'
 # Screen
 #
 
+export TERM='xterm'
 # Auto start a session when Zsh is launched.
-# zstyle ':prezto:module:screen' auto-start 'yes'
+zstyle ':prezto:module:screen' auto-start 'yes'
 
 #
 # GPG-Agent
@@ -116,7 +121,7 @@ zstyle ':prezto:module:prompt' theme 'sorin'
 #
 
 # Auto set the tab and window titles.
-zstyle ':prezto:module:terminal' auto-title 'yes'
+#zstyle ':prezto:module:terminal' auto-title 'yes'
 
 #
 # Tmux
