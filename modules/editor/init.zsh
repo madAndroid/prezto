@@ -326,6 +326,8 @@ fi
 
 # Toggle comment at the start of the line.
 bindkey -M vicmd "#" vi-pound-insert
+bindkey -M viins '^r' history-incremental-search-backward
+bindkey -M vicmd '^r' history-incremental-search-backward
 
 #
 # Emacs and Vi Key Bindings
