@@ -36,6 +36,7 @@ zstyle ':prezto:load' pmodule \
   'git' \
   'python' \
   'ruby' \
+  'rsync' \
   'prompt'
 
 #
@@ -85,6 +86,7 @@ zstyle ':prezto:module:prompt' theme 'sorin'
 export TERM='xterm'
 # Auto start a session when Zsh is launched.
 zstyle ':prezto:module:screen' auto-start 'yes'
+zstyle ':prezto:module:screen' resume 'no'
 
 #
 # GPG-Agent
