@@ -255,6 +255,9 @@ else
   bindkey -M vicmd "/" history-incremental-search-forward
 fi
 
+bindkey -M viins '^r' history-incremental-search-backward
+bindkey -M vicmd '^r' history-incremental-search-backward
+
 #
 # Emacs and Vi Key Bindings
 #
