@@ -296,6 +296,9 @@ else
   bindkey -M vicmd "/" history-incremental-search-forward
 fi
 
+bindkey -M viins '^r' history-incremental-search-backward
+bindkey -M vicmd '^r' history-incremental-search-backward
+
 #
 # Emacs and Vi Key Bindings
 #
@@ -308,7 +311,7 @@ for keymap in 'emacs' 'viins'; do
   bindkey -M "$keymap" "$key_info[Home]" beginning-of-line
   bindkey -M "$keymap" "$key_info[End]" end-of-line
 
-#  bindkey -M "$keymap" "$key_info[Insert]" overwrite-mode
+  bindkey -M "$keymap" "$key_info[Insert]" overwrite-mode
   bindkey -M "$keymap" "$key_info[Delete]" delete-char
   bindkey -M "$keymap" "$key_info[Backspace]" backward-delete-char
 
