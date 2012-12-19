@@ -25,10 +25,11 @@ if [[ -z "$STY" && -z "$EMACS" && -z "$VIM" ]] && ( \
       | awk '{print $1}' \
       | head -1)"
 
-  if [[ -n "$session" ]]; then
+  if [[ -n "$session" ]] && zstyle -t ':prezto:module:screen' resume; then
     exec screen -x "$session"
   else
-    exec screen -a -A -U -D -R -m "$SHELL" -l
+#    exec screen -a -A -U -D -R -m "$SHELL" -l
+    exec screen -S ZSH
   fi
 fi
 
