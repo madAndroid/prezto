@@ -12,6 +12,7 @@
 if [[ "$OSTYPE" == darwin* ]]; then
   export BROWSER='open'
 fi
+export BROWSER='google-chrome'
 
 #
 # Editors
@@ -86,6 +87,9 @@ for path_file in /etc/paths.d/*(.N); do
   path+=($(<$path_file))
 done
 unset path_file
+
+### Speed up startup
+skip_global_compinit=1
 
 #
 # Temporary Files
