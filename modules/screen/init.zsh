@@ -14,14 +14,45 @@ fi
 # Auto Start
 #
 
+if [[ -z "$STY" ]] && zstyle -t ':prezto:module:screen' prompt-start; then
+  echo "Do you wish to start a screen session?"
+  sleep 1
+  select yn in "Yes" "No"; do
+    case $yn in 
+      Yes) exec screen -S ZSH ;;
+      No) break ;;
+      *) break ;;
+    esac
+  done
+fi
+	
+if [[ -z "$STY" ]] && zstyle -t ':prezto:module:screen' prompt-resume; then
+  echo "Do you wish to resume last screen session?"
+  sleep 1
+  select yn in "Yes" "No"; do
+    case $yn in 
+      Yes) 
+        session="$(
+          screen -list 2> /dev/null \
+            | sed '1d;$d' \
+            | awk '{print $1}' \
+            | head -1)"
+        exec screen -x "$session"
+      ;;
+      No) break ;;
+      *) break ;;
+    esac
+  done
+fi
+
 if [[ -z "$STY" ]] && zstyle -t ':prezto:module:screen' auto-start; then
-  session="$(
-    screen -list 2> /dev/null \
-      | sed '1d;$d' \
-      | awk '{print $1}' \
-      | head -1)"
 
   if [[ -n "$session" ]] && zstyle -t ':prezto:module:screen' resume; then
+    session="$(
+      screen -list 2> /dev/null \
+        | sed '1d;$d' \
+        | awk '{print $1}' \
+        | head -1)"
     exec screen -x "$session"
   else
 #    exec screen -a -A -U -D -R -m "$SHELL" -l
