@@ -46,7 +46,11 @@ function prompt_android_setup {
   add-zsh-hook precmd prompt_android_precmd
 
   zstyle ':prezto:module:editor:info:completing' format '%B%F{red}...%f%b'
-  zstyle ':prezto:module:editor:info:keymap:primary' format ' %B%F{blue}❯%F{blue}❯%F{blue}❯%f%b'
+  if [[ `hostname` == '900-X3A' ]]; then
+    zstyle ':prezto:module:editor:info:keymap:primary' format ' %B%F{blue}❯%F{blue}❯%F{blue}❯%f%b'
+  else
+    zstyle ':prezto:module:editor:info:keymap:primary' format ' %B%F{green}❯%F{blue}❯%F{green}❯%f%b'
+  fi
   zstyle ':prezto:module:editor:info:keymap:primary:overwrite' format ' %F{red}♺%f'
   zstyle ':prezto:module:editor:info:keymap:alternate' format ' %B%F{green}❮%F{yellow}❮%F{red}❮%f%b'
   zstyle ':prezto:module:git:info:action' format ':%%B%F{yellow}%s%f%%b'
@@ -67,7 +71,12 @@ function prompt_android_setup {
     'rprompt' '%A%B%S%a%d%m%r%U%u'
 
   # Define prompts.
-  PROMPT='%F{cyan}${_prompt_android_pwd}%f${git_info:+${(e)git_info[prompt]}}%(!. %B%F{red}#%f%b.)${editor_info[keymap]} '
+
+  if [[ `hostname` == '900-X3A' ]]; then
+    PROMPT='%F{cyan}${_prompt_android_pwd}%f${git_info:+${(e)git_info[prompt]}}%(!. %B%F{red}#%f%b.)${editor_info[keymap]} '
+  else
+    PROMPT='%F{green}${_prompt_android_pwd}%f${git_info:+${(e)git_info[prompt]}}%(!. %B%F{red}#%f%b.)${editor_info[keymap]} '
+  fi
   RPROMPT='${editor_info[overwrite]}%(?:: %F{red}⏎%f)${VIM:+" %B%F{green}V%f%b"}${git_info[rprompt]}'
   SPROMPT='zsh: correct %F{red}%R%f to %F{green}%r%f [nyae]? '
 }
