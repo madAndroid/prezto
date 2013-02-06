@@ -146,12 +146,13 @@ zstyle ':prezto:module:prompt' theme 'android'
 # zstyle ':prezto:module:ruby:chruby' auto-switch 'yes'
 
 export TERM='xterm'
-# Auto start a session when Zsh is launched.
 
+# Auto start a session when Zsh is launched.
 if [[ `hostname` == '900-X3A' ]]; then
   zstyle ':prezto:module:screen' prompt-start 'yes'
 else
   zstyle ':prezto:module:screen' prompt-resume 'yes'
+  zstyle ':prezto:module:screen' prompt-start 'yes'
 fi
 zstyle ':prezto:module:screen' resume 'no'
 
