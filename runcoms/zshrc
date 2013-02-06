@@ -12,3 +12,11 @@ fi
 
 # Customize to your needs...
 
+title() {
+    if [ $STY ]; then
+        echo -ne "\033 k$1\033\\" 
+    else
+        echo -ne "\033]2;$1\007"
+    fi
+}
+
