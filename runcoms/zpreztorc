@@ -25,15 +25,18 @@ zstyle ':prezto:*:*' color 'yes'
 # The order matters.
 zstyle ':prezto:load' pmodule \
   'environment' \
-  'terminal' \
   'editor' \
+  'terminal' \
+  'screen' \
   'history' \
   'directory' \
   'spectrum' \
   'utility' \
+  'dpkg' \
   'completion' \
   'git' \
   'python' \
+  'puppet' \
   'ruby' \
   'rsync' \
   'prompt'
