@@ -85,6 +85,9 @@ path=(
   /usr/{bin,sbin}
   /{bin,sbin}
   /usr/local/packer
+  /usr/{bin,sbin}
+  /{bin,sbin}
+  ~/bin
   $path
 )
 
