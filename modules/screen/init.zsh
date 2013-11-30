@@ -3,6 +3,7 @@
 #
 # Authors:
 #   Sorin Ionescu <sorin.ionescu@gmail.com>
+#   Georges Discry <georges@discry.be>
 #
 
 # Return if requirements are not found.
@@ -69,7 +70,6 @@ else
 fi
 
 if [[ -z "$STY" ]] && zstyle -t ':prezto:module:screen' auto-start; then
-
   if [[ -n "$session" ]] && zstyle -t ':prezto:module:screen' resume; then
     exec screen -x "$session"
   else
