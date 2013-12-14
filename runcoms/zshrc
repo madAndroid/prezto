@@ -56,3 +56,6 @@ PATH=/usr/local/aws/datapipeline:$PATH
 #export EC2_CERT=$(echo $HOME/.aws-default/cert-*.pem)
 export ELASTIC_MAPREDUCE_CREDENTIALS=$HOME/.aws-default/aws-credentials.json
 export DATA_PIPELINE_CREDENTIALS=$HOME/.aws-default/aws-credentials.json
+
+alias vless="vim -u ~/.vimrc.less "
+alias less=vless
