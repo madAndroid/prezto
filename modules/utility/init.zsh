@@ -141,6 +141,9 @@ fi
 
 # Miscellaneous
 
+# Vagrant:
+alias vagrant-up-snap='vagrant up --no-provision && vagrant snap take'
+
 # Serves a directory via HTTP.
 alias http-serve='python -m SimpleHTTPServer'
 
