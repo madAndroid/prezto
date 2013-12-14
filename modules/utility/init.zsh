@@ -173,6 +173,9 @@ fi
 
 # Miscellaneous
 
+# Vagrant:
+alias vagrant-up-snap='vagrant up --no-provision && vagrant snap take'
+
 # Serves a directory via HTTP.
 if (( $+commands[python3] )); then
   alias http-serve='python3 -m http.server'
