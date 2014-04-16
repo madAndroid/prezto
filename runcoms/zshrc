@@ -58,4 +58,12 @@ export ELASTIC_MAPREDUCE_CREDENTIALS=$HOME/.aws-default/aws-credentials.json
 export DATA_PIPELINE_CREDENTIALS=$HOME/.aws-default/aws-credentials.json
 
 alias vless="vim -u ~/.vimrc.less "
-alias less=vless
+#alias less=vless
+
+#alias s3cmd="s3cmd -c $S3CMD_CONFIGFILE"
+
+export EDITOR='vim'
+
+eval "$(direnv hook zsh)"
+
+#PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
