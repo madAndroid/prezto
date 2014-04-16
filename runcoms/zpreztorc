@@ -28,6 +28,7 @@ zstyle ':prezto:load' pmodule \
   'editor' \
   'terminal' \
   'screen' \
+  'ssh' \
   'history' \
   'directory' \
   'spectrum' \
