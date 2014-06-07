@@ -16,3 +16,4 @@ fi
 
 # Manages .pac* files.
 alias pacc='yaourt -C'
+
