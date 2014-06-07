@@ -27,7 +27,9 @@ function prompt_for_tmux_start {
         echo "starting tmux"
         tmux start-server
 
-        tmux_session="tmux-$$"
+        DEFAULT_SESSION="tmux-$$"
+        vared -p "Session: " DEFAULT_SESSION
+        tmux_session="$DEFAULT_SESSION"
         tmux \
             new-session -d -s "$tmux_session" \; \
             set-option -t "$tmux_session" destroy-unattached off &> /dev/null

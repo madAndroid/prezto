@@ -26,7 +26,6 @@ zstyle ':prezto:*:*' color 'yes'
 zstyle ':prezto:load' pmodule \
   'environment' \
   'editor' \
-  'terminal' \
   'tmux' \
   'ssh' \
   'history' \
@@ -158,13 +157,13 @@ zstyle ':prezto:module:prompt' theme 'android'
 #
 
 # Auto set the tab and window titles.
-zstyle ':prezto:module:terminal' auto-title 'yes'
-
-# Set the window title format.
-zstyle ':prezto:module:terminal:window-title' format '%n@%m: %s'
-
-# Set the tab title format.
-zstyle ':prezto:module:terminal:tab-title' format '%m: %s'
+#zstyle ':prezto:module:terminal' auto-title 'yes'
+#
+## Set the window title format.
+#zstyle ':prezto:module:terminal:window-title' format '%n@%m: %s'
+#
+## Set the tab title format.
+#zstyle ':prezto:module:terminal:tab-title' format '%m: %s'
 
 #
 # Tmux
@@ -176,8 +175,8 @@ zstyle ':prezto:module:terminal:tab-title' format '%m: %s'
 # Auto start a session when Zsh is launched in a SSH connection.
 #zstyle ':prezto:module:tmux:auto-start' remote 'yes'
 
-
-export TERM='xterm'
+export TERM='xterm-256color'
+#export TERM='xterm'
 
 # Auto start a session when Zsh is launched.
 if [[ `hostname` == 'AS-ThinkPad-X201' ]]; then
