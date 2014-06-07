@@ -38,12 +38,6 @@ if grep '^enable-ssh-support' "$_gpg_agent_conf" &> /dev/null; then
 
   # Load the SSH module for additional processing.
   pmodload 'ssh'
-
-  # Updates the GPG-Agent TTY before every command since SSH does not set it.
-  function _gpg-agent-update-tty {
-    gpg-connect-agent UPDATESTARTUPTTY /bye >/dev/null
-  }
-  add-zsh-hook preexec _gpg-agent-update-tty
 fi
 
 # Clean up.
@@ -53,3 +47,4 @@ unset _gpg_agent_{conf,env}
 if [[ -n "$SSH_CONNECTION" ]]; then
   export PINENTRY_USER_DATA='USE_CURSES=1'
 fi
+

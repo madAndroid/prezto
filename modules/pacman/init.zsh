@@ -86,3 +86,4 @@ function aurget {
 }
 
 unset _pacman_{frontend,sudo}
+
