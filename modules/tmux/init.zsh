@@ -93,6 +93,8 @@ if [[ -z "$STY" ]] && zstyle -t ':prezto:module:tmux' auto-start; then
         new-session -d -s "$tmux_session" \; \
         set-option -t "$tmux_session" destroy-unattached off &> /dev/null
   fi
+  # Attach to the 'prezto' session or to the last session used.
+  exec tmux attach-session
 fi
 
 #
