@@ -60,10 +60,15 @@ export DATA_PIPELINE_CREDENTIALS=$HOME/.aws-default/aws-credentials.json
 alias vless="vim -u ~/.vimrc.less "
 #alias less=vless
 
-#alias s3cmd="s3cmd -c $S3CMD_CONFIGFILE"
+S3CMD_CONFIGFILE=$(eval $S3CMD_CONFIGFILE)
+
+alias s3cmd="s3cmd -c ./s3cfg"
 
 export EDITOR='vim'
 
 eval "$(direnv hook zsh)"
 
+#autoload -U tetris ; zle -N tetris ; bindkey '...' tetris
+
 #PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
+
