@@ -164,7 +164,7 @@ alias squid-purge-all="for url in \$(sudo cat /var/log/squid3/access.log | tail 
 alias http-serve='python -m SimpleHTTPServer'
 
 # Apt:
-alias purge-kernels="sudo apt-get remove --purge $(dpkg -l 'linux-*' | sed '/^ii/!d;/'"$(uname -r | sed "s/\(.*\)-\([^0-9]\+\)/\1/")"'/d;s/^[^ ]* [^ ]* \([^ ]*\).*/\1/;/[0-9]/!d')"
+#alias purge-kernels="sudo apt-get remove --purge $(dpkg -l 'linux-*' | sed '/^ii/!d;/'"$(uname -r | sed "s/\(.*\)-\([^0-9]\+\)/\1/")"'/d;s/^[^ ]* [^ ]* \([^ ]*\).*/\1/;/[0-9]/!d')"
 
 #
 # Functions

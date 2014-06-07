@@ -49,6 +49,7 @@ path=(
   /usr/{bin,sbin}
   /{bin,sbin}
   ~/bin
+  ~/google-cloud-sdk/bin
   $path
 )
 
