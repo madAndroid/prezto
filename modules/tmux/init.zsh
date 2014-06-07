@@ -75,7 +75,7 @@ fi
 
 if [[ -n "$session" ]]; then
   if [[ -z "$TMUX" ]] && zstyle -t ':prezto:module:tmux' prompt-resume; then
-    prompt_for_tmux_resume || prompt_for_screen_start
+    prompt_for_tmux_resume || prompt_for_tmux_start
   elif [[ -z "$TMUX" ]] && zstyle -t ':prezto:module:tmux' prompt-start; then
     prompt_for_tmux_start
   fi
