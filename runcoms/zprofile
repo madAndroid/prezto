@@ -19,7 +19,8 @@ fi
 
 export EDITOR='vim'
 export VISUAL='vim'
-export PAGER='less'
+#export PAGER='less'
+export PAGER=~/bin/vimpager
 
 #
 # Language
