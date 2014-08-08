@@ -25,7 +25,7 @@ function prompt_for_tmux_start {
     case $yn in
       Yes)
         echo "starting tmux"
-        tmux start-server
+        tmux -u start-server
 
         DEFAULT_SESSION="tmux-$$"
         vared -p "Session: " DEFAULT_SESSION
