@@ -147,9 +147,9 @@ fi
 # Miscellaneous
 
 # Vagrant:
-alias vagrant-up-snap='vagrant up --no-provision && vagrant snap take'
-alias vagrant-rollback-provision='vagrant snap rollback && vagrant provision'
-alias vagrant-fuck-it='vagrant destroy -f && vagrant up'
+#alias vagrant-up-snap='vagrant up --no-provision && vagrant snap take'
+#alias vagrant-rollback-provision='vagrant snap rollback && vagrant provision'
+#alias vagrant-fuck-it='vagrant destroy -f && vagrant up'
 
 # Vbox:
 alias vbox-ls-vms='VBoxManage list vms'
@@ -204,4 +204,35 @@ function find-exec {
 function psu {
   ps -U "${1:-$USER}" -o 'pid,%cpu,%mem,command' "${(@)argv[2,-1]}"
 }
+
+# Displays user owned processes status.
+function psu {
+  ps -U "${1:-$USER}" -o 'pid,%cpu,%mem,command' "${(@)argv[2,-1]}"
+}
+
+# Vagrant:
+function vag-up-clean-snap {
+    vagrant up $@ --no-provision && vagrant snap take $@
+}
+
+function vag-up-prov-snap {
+    vagrant up $@ --no-provision && vagrant snap take $@
+}
+
+function vag-rb-provision {
+    vagrant snap rollback $@ && vagrant provision $@
+}
+
+function vag-rb-cukes {
+    vagrant snap rollback $@ && vagrant cucumber
+}
+
+function vag-fuck-it {
+    vagrant destroy -f $@ && vagrant up $@
+}
+
+function vag-nuke {
+    vagrant destroy -f $@
+}
+
 

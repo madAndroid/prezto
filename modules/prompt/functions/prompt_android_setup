@@ -53,6 +53,8 @@ function prompt_android_setup {
   fi
   zstyle ':prezto:module:editor:info:keymap:primary:overwrite' format ' %F{red}♺%f'
   zstyle ':prezto:module:editor:info:keymap:alternate' format ' %B%F{green}❮%F{yellow}❮%F{red}❮%f%b'
+
+  zstyle ':prezto:module:git:info' verbose 'yes'
   zstyle ':prezto:module:git:info:action' format ':%%B%F{yellow}%s%f%%b'
   zstyle ':prezto:module:git:info:added' format ' %%B%F{green}✚%f%%b'
   zstyle ':prezto:module:git:info:ahead' format ' %%B%F{yellow}⬆%f%%b'
@@ -77,7 +79,7 @@ function prompt_android_setup {
   else
     PROMPT='%F{green}${_prompt_android_pwd}%f${git_info:+${(e)git_info[prompt]}}%(!. %B%F{red}#%f%b.) ${editor_info[overwrite]}%(?:: %F{red}⏎%f)${VIM:+" %B%F{green}V%f%b"}${git_info[rprompt]} ${editor_info[keymap]} '
   fi
-  RPROMPT='${editor_info[overwrite]}%(?:: %F{red}⏎%f)${VIM:+" %B%F{green}V%f%b"}${git_info[rprompt]}'
+#  RPROMPT='${editor_info[overwrite]}%(?:: %F{red}⏎%f)${VIM:+" %B%F{green}V%f%b"}${git_info[rprompt]}'
   SPROMPT='zsh: correct %F{red}%R%f to %F{green}%r%f [nyae]? '
 }
 
