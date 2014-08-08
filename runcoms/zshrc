@@ -62,8 +62,12 @@ PATH=/usr/local/aws/datapipeline:$PATH
 export ELASTIC_MAPREDUCE_CREDENTIALS=$HOME/.aws-default/aws-credentials.json
 export DATA_PIPELINE_CREDENTIALS=$HOME/.aws-default/aws-credentials.json
 
-alias vless="vim -u ~/.vimrc.less "
-#alias less=vless
+export VIMPAGER_RC="~/.vimrc.less"
+#alias vless="vim -u ~/.vimrc.less "
+#alias less=$PAGER
+alias vless=$PAGER
+
+alias rauns="reattach-to-user-namespace -l zsh"
 
 del_known_host() {
     sed -i -e "$1 d" /home/andrew/.ssh/known_hosts

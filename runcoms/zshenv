@@ -20,7 +20,8 @@ export BROWSER='google-chrome'
 
 export EDITOR='vim'
 export VISUAL='vim'
-export PAGER='less'
+#export PAGER='less'
+export PAGER='vless'
 
 #
 # Language
@@ -50,6 +51,8 @@ path=(
   /{bin,sbin}
   ~/bin
   ~/google-cloud-sdk/bin
+  /opt/local/bin
+  /opt/local/sbin
   $path
 )
 
