@@ -147,10 +147,24 @@ fi
 # Miscellaneous
 
 # Vagrant:
-alias vagrant-up-snap='vagrant up --no-provision && vagrant snap take'
+#alias vagrant-up-snap='vagrant up --no-provision && vagrant snap take'
+#alias vagrant-rollback-provision='vagrant snap rollback && vagrant provision'
+#alias vagrant-fuck-it='vagrant destroy -f && vagrant up'
+
+# Vbox:
+alias vbox-ls-vms='VBoxManage list vms'
+alias vbox-ls-vm-state='for vm in `VBoxManage list vms | cut -d\" -f2`; do echo $vm && VBoxManage showvminfo $vm --machinereadable | grep VMState=; done'
+alias vbox-shutdown-vms='for vm in `VBoxManage list vms | cut -d\" -f2`; do VBoxManage controlvm $vm savestate; done'
+alias vbox-delete-vms='for vm in `VBoxManage list vms | cut -d\" -f2`; do VBoxManage unregistervm $vm --delete; done'
+
+alias squid-purge-repodata="for url in \$(sudo cat /var/log/squid3/access.log | tail -n 100000 | grep repodata | awk '{print \$7}' | sort | uniq); do echo \$url; squidclient -m PURGE \$url; done"
+alias squid-purge-all="for url in \$(sudo cat /var/log/squid3/access.log | tail -n 100000 | grep http | awk '{print \$7}' | sort | uniq); do echo \$url; squidclient -m PURGE \$url; done"
 
 # Serves a directory via HTTP.
 alias http-serve='python -m SimpleHTTPServer'
+
+# Apt:
+#alias purge-kernels="sudo apt-get remove --purge $(dpkg -l 'linux-*' | sed '/^ii/!d;/'"$(uname -r | sed "s/\(.*\)-\([^0-9]\+\)/\1/")"'/d;s/^[^ ]* [^ ]* \([^ ]*\).*/\1/;/[0-9]/!d')"
 
 #
 # Functions
@@ -190,4 +204,35 @@ function find-exec {
 function psu {
   ps -U "${1:-$USER}" -o 'pid,%cpu,%mem,command' "${(@)argv[2,-1]}"
 }
+
+# Displays user owned processes status.
+function psu {
+  ps -U "${1:-$USER}" -o 'pid,%cpu,%mem,command' "${(@)argv[2,-1]}"
+}
+
+# Vagrant:
+function vag-up-clean-snap {
+    vagrant up $@ --no-provision && vagrant snap take $@
+}
+
+function vag-up-prov-snap {
+    vagrant up $@ --no-provision && vagrant snap take $@
+}
+
+function vag-rb-provision {
+    vagrant snap rollback $@ && vagrant provision $@
+}
+
+function vag-rb-cukes {
+    vagrant snap rollback $@ && vagrant cucumber
+}
+
+function vag-fuck-it {
+    vagrant destroy -f $@ && vagrant up $@
+}
+
+function vag-nuke {
+    vagrant destroy -f $@
+}
+
 

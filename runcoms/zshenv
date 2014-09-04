@@ -20,7 +20,8 @@ export BROWSER='google-chrome'
 
 export EDITOR='vim'
 export VISUAL='vim'
-export PAGER='less'
+#export PAGER='less'
+export PAGER='vless'
 
 #
 # Language
@@ -45,9 +46,13 @@ typeset -gU cdpath fpath mailpath path
 path=(
   /usr/local/{bin,sbin}
   /usr/local/packer
+  /usr/local/go/bin
   /usr/{bin,sbin}
   /{bin,sbin}
   ~/bin
+  ~/google-cloud-sdk/bin
+  /opt/local/bin
+  /opt/local/sbin
   $path
 )
 

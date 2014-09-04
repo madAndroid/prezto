@@ -15,15 +15,18 @@ fi
 title() {
     if [ $STY ]; then
         echo -ne "\033 k$1\033\\" 
-    else
-        echo -ne "\033]2;$1\007"
+    elif [ $TMUX ]; then
+        if [ $# -gt 1 ]; then
+            tmux rename-window -t $1 $2
+        else
+            tmux rename-window $1
+        fi
     fi
 }
 
+### AWS-fu
+#
 export AWS_CONFIG_FILE='~/.aws/aws_cli_config'
-
-source /usr/local/bin/aws_zsh_completer.sh
-
 export JAVA_HOME=/usr
 export EC2_HOME=/usr/local/aws/ec2
 export AWS_IAM_HOME=/usr/local/aws/iam
@@ -39,9 +42,11 @@ export AWS_ROUTE53_HOME=/usr/local/aws/route53
 export AWS_CLOUDFRONT_HOME=/usr/local/aws/cloudfront
 export EC2_URL=https://ec2.eu-west-1.amazonaws.com
 export EC2_REGION=eu-west-1
-export AWS_CREDENTIAL_FILE=$HOME/.aws-default/aws-credential-file.txt
-export AWS_ACCESS_KEY=$(grep '^AWSAccessKeyId' "$AWS_CREDENTIAL_FILE" | cut -d= -f2)
-export AWS_SECRET_KEY=$(grep '^AWSSecretKey'   "$AWS_CREDENTIAL_FILE" | cut -d= -f2)
+#export AWS_CREDENTIAL_FILE=$HOME/.aws-default/aws-credential-file.txt
+#export AWS_ACCESS_KEY=$(grep '^AWSAccessKeyId' "$AWS_CREDENTIAL_FILE" | cut -d= -f2)
+#export AWS_SECRET_KEY=$(grep '^AWSSecretKey'   "$AWS_CREDENTIAL_FILE" | cut -d= -f2)
+
+source /usr/local/bin/aws_zsh_completer.sh
 
 for i in $EC2_HOME $AWS_IAM_HOME $AWS_RDS_HOME $AWS_ELB_HOME $AWS_CLOUDFORMATION_HOME $AWS_AUTO_SCALING_HOME $CS_HOME $AWS_CLOUDWATCH_HOME $AWS_ELASTICACHE_HOME $AWS_SNS_HOME $AWS_ROUTE53_HOME $AWS_CLOUDFRONT_HOME /usr/local/aws/s3
     do
@@ -57,5 +62,26 @@ PATH=/usr/local/aws/datapipeline:$PATH
 export ELASTIC_MAPREDUCE_CREDENTIALS=$HOME/.aws-default/aws-credentials.json
 export DATA_PIPELINE_CREDENTIALS=$HOME/.aws-default/aws-credentials.json
 
-alias vless="vim -u ~/.vimrc.less "
-alias less=vless
+export VIMPAGER_RC="~/.vimrc.less"
+#alias vless="vim -u ~/.vimrc.less "
+#alias less=$PAGER
+alias vless=$PAGER
+
+alias rauns="reattach-to-user-namespace -l zsh"
+
+del_known_host() {
+    sed -i -e "$1 d" /home/andrew/.ssh/known_hosts
+}
+
+S3CMD_CONFIGFILE=$(eval $S3CMD_CONFIGFILE)
+
+#alias s3cmd="s3cmd -c ./s3cfg"
+
+export EDITOR='vim'
+
+eval "$(direnv hook zsh)"
+
+#autoload -U tetris ; zle -N tetris ; bindkey '...' tetris
+
+#PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
+

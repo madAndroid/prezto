@@ -26,13 +26,12 @@ zstyle ':prezto:*:*' color 'yes'
 zstyle ':prezto:load' pmodule \
   'environment' \
   'editor' \
-  'terminal' \
-  'screen' \
+  'tmux' \
+  'ssh' \
   'history' \
   'directory' \
   'spectrum' \
   'utility' \
-  'dpkg' \
   'completion' \
   'git' \
   'python' \
@@ -46,7 +45,7 @@ zstyle ':prezto:load' pmodule \
 #
 
 # Set the key mapping style to 'emacs' or 'vi'.
-zstyle ':prezto:module:editor' key-bindings 'emacs'
+#zstyle ':prezto:module:editor' key-bindings 'emacs'
 
 # Auto convert .... to ../..
 # zstyle ':prezto:module:editor' dot-expansion 'yes'
@@ -105,16 +104,16 @@ zstyle ':prezto:module:prompt' theme 'android'
 # Screen
 #
 
-export TERM='xterm'
-
-# Auto start a session when Zsh is launched.
-if [[ `hostname` == 'AS-ThinkPad-X201' ]]; then
-  zstyle ':prezto:module:screen' prompt-start 'yes'
-else
-  zstyle ':prezto:module:screen' prompt-resume 'yes'
-  zstyle ':prezto:module:screen' prompt-start 'yes'
-fi
-zstyle ':prezto:module:screen' resume 'no'
+#export TERM='xterm'
+#
+## Auto start a session when Zsh is launched.
+#if [[ `hostname` == 'AS-ThinkPad-X201' ]]; then
+#  zstyle ':prezto:module:screen' prompt-start 'yes'
+#else
+#  zstyle ':prezto:module:screen' prompt-resume 'yes'
+#  zstyle ':prezto:module:screen' prompt-start 'yes'
+#fi
+#zstyle ':prezto:module:screen' resume 'no'
 
 #
 # GPG-Agent
@@ -154,20 +153,33 @@ zstyle ':prezto:module:screen' resume 'no'
 #
 
 # Auto set the tab and window titles.
-# zstyle ':prezto:module:terminal' auto-title 'yes'
-
-# Set the window title format.
-# zstyle ':prezto:module:terminal:window-title' format '%n@%m: %s'
-
-# Set the tab title format.
-# zstyle ':prezto:module:terminal:tab-title' format '%m: %s'
+#zstyle ':prezto:module:terminal' auto-title 'yes'
+#
+## Set the window title format.
+#zstyle ':prezto:module:terminal:window-title' format '%n@%m: %s'
+#
+## Set the tab title format.
+#zstyle ':prezto:module:terminal:tab-title' format '%m: %s'
 
 #
 # Tmux
 #
 
 # Auto start a session when Zsh is launched in a local terminal.
-# zstyle ':prezto:module:tmux:auto-start' local 'yes'
+#zstyle ':prezto:module:tmux:auto-start' local 'yes'
 
 # Auto start a session when Zsh is launched in a SSH connection.
-# zstyle ':prezto:module:tmux:auto-start' remote 'yes'
+#zstyle ':prezto:module:tmux:auto-start' remote 'yes'
+
+#export TERM='xterm-256color'
+export TERM='xterm'
+#export TERM=screen-256color-bce
+
+# Auto start a session when Zsh is launched.
+if [[ `hostname` == 'AS-ThinkPad-X201' ]]; then
+  zstyle ':prezto:module:tmux' prompt-start 'yes'
+else
+  zstyle ':prezto:module:tmux' prompt-resume 'yes'
+  zstyle ':prezto:module:tmux' prompt-start 'yes'
+fi
+

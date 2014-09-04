@@ -17,20 +17,84 @@ fi
 # Auto Start
 #
 
-if [[ -z "$TMUX" && -z "$EMACS" && -z "$VIM" ]] && ( \
-  ( [[ -n "$SSH_TTY" ]] && zstyle -t ':prezto:module:tmux:auto-start' remote ) ||
-  ( [[ -z "$SSH_TTY" ]] && zstyle -t ':prezto:module:tmux:auto-start' local ) \
-); then
-  tmux start-server
+function prompt_for_tmux_start {
 
-  # Create a 'prezto' session if no session has been defined in tmux.conf.
-  if ! tmux has-session 2> /dev/null; then
-    tmux_session='prezto'
-    tmux \
-      new-session -d -s "$tmux_session" \; \
-      set-option -t "$tmux_session" destroy-unattached off &> /dev/null
+  echo "---  ***  ***  *** --- "
+  echo "start tmux session?"
+  select yn in "Yes" "No"; do
+    case $yn in
+      Yes)
+        echo "starting tmux"
+        tmux -u start-server
+
+        DEFAULT_SESSION="tmux-$$"
+        vared -p "Session: " DEFAULT_SESSION
+        tmux_session="$DEFAULT_SESSION"
+        tmux \
+            new-session -d -s "$tmux_session" \; \
+            set-option -t "$tmux_session" destroy-unattached off &> /dev/null
+        exec tmux attach-session
+
+      ;;
+      No)
+        echo "not starting tmux"
+        break
+      ;;
+      *) break ;;
+    esac
+  done
+
+}
+
+function prompt_for_tmux_resume {
+
+  echo "---  ***  ***  *** --- "
+  echo "Existing tmux session found: resume last session?"
+  select yn in "Yes" "No"; do
+    case $yn in
+      Yes)
+        exec tmux attach-session
+      ;;
+      No) return 1 && break ;;
+      *) return 1 && break ;;
+    esac
+  done
+
+}
+
+if tmux has-session 2> /dev/null; then
+    session="$(
+        tmux list-sessions \
+        | awk '{print $1}' \
+        | head -1 \
+        | cut -d: -f 1)"
+
+else
+    session=""
+fi
+
+if [[ -n "$session" ]]; then
+  if [[ -z "$TMUX" ]] && zstyle -t ':prezto:module:tmux' prompt-resume; then
+    prompt_for_tmux_resume || prompt_for_tmux_start
+  elif [[ -z "$TMUX" ]] && zstyle -t ':prezto:module:tmux' prompt-start; then
+    prompt_for_tmux_start
   fi
+else
+  if [[ -z "$TERM" ]] || zstyle -t ':prezto:module:tmux' prompt-start; then
+    prompt_for_tmux_start
+  fi
+fi
 
+if [[ -z "$STY" ]] && zstyle -t ':prezto:module:tmux' auto-start; then
+  if [[ -n "$session" ]] && zstyle -t ':prezto:module:tmux' resume; then
+    exec tmux attach-session
+  else
+    tmux start-server
+    tmux_session="tmux-$$"
+    tmux \
+        new-session -d -s "$tmux_session" \; \
+        set-option -t "$tmux_session" destroy-unattached off &> /dev/null
+  fi
   # Attach to the 'prezto' session or to the last session used.
   exec tmux attach-session
 fi
