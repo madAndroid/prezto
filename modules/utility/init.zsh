@@ -157,8 +157,8 @@ alias vbox-ls-vm-state='for vm in `VBoxManage list vms | cut -d\" -f2`; do echo 
 alias vbox-shutdown-vms='for vm in `VBoxManage list vms | cut -d\" -f2`; do VBoxManage controlvm $vm savestate; done'
 alias vbox-delete-vms='for vm in `VBoxManage list vms | cut -d\" -f2`; do VBoxManage unregistervm $vm --delete; done'
 
-alias squid-purge-repodata="for url in \$(sudo cat /var/log/squid3/access.log | tail -n 100000 | grep repodata | awk '{print \$7}' | sort | uniq); do echo \$url; squidclient -m PURGE \$url; done"
-alias squid-purge-all="for url in \$(sudo cat /var/log/squid3/access.log | tail -n 100000 | grep http | awk '{print \$7}' | sort | uniq); do echo \$url; squidclient -m PURGE \$url; done"
+alias squid-purge-repodata="for url in \$(cat ~/Library/Logs/squid/squid-access.log | tail -n 100000 | grep repodata | awk '{print \$7}' | sort | uniq); do echo \$url; /usr/local/squid/bin/squidclient -m PURGE \$url; done"
+alias squid-purge-all="for url in \$(cat ~/Library/Logs/squid/squid-access.log | tail -n 100000 | grep http | awk '{print \$7}' | sort | uniq); do echo \$url; /usr/local/squid/bin/squidclient  -m PURGE \$url; done"
 
 # Serves a directory via HTTP.
 alias http-serve='python -m SimpleHTTPServer'
