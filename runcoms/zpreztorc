@@ -38,6 +38,7 @@ zstyle ':prezto:load' pmodule \
   'puppet' \
   'ruby' \
   'rsync' \
+  'gnu-utility' \
   'prompt'
 
 #
@@ -179,7 +180,7 @@ export TERM='xterm'
 #export TERM=screen-256color-bce
 
 # Auto start a session when Zsh is launched.
-if [[ `hostname` == 'AS-ThinkPad-X201' ]]; then
+if [[ `hostname` == 'Andrews-MacBook-Pro.local' ]]; then
   zstyle ':prezto:module:tmux' prompt-start 'yes'
 else
   zstyle ':prezto:module:tmux' prompt-resume 'yes'
