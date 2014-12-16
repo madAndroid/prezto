@@ -85,3 +85,9 @@ eval "$(direnv hook zsh)"
 
 #PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
 
+# Enable dirhistory:
+# (see http://zsh.sourceforge.net/Intro/intro_6.html)
+
+DIRSTACKSIZE=8
+setopt autopushd pushdminus pushdsilent pushdtohome
+alias dh='dirs -v'
