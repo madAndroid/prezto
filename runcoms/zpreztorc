@@ -166,11 +166,8 @@ zstyle ':prezto:module:prompt' theme 'android'
 # Tmux
 #
 
-# Auto start a session when Zsh is launched in a local terminal.
-#zstyle ':prezto:module:tmux:auto-start' local 'yes'
-
 # Auto start a session when Zsh is launched in a SSH connection.
-#zstyle ':prezto:module:tmux:auto-start' remote 'yes'
+# zstyle ':prezto:module:tmux:auto-start' remote 'yes'
 
 #export TERM='xterm-256color'
 export TERM='xterm'
@@ -184,3 +181,5 @@ else
   zstyle ':prezto:module:tmux' prompt-start 'yes'
 fi
 
+# Integrate with iTerm2.
+# zstyle ':prezto:module:tmux:iterm' integrate 'yes'
