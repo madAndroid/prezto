@@ -157,8 +157,8 @@ alias vbox-ls-vm-state='for vm in `VBoxManage list vms | cut -d\" -f2`; do echo 
 alias vbox-shutdown-vms='for vm in `VBoxManage list vms | cut -d\" -f2`; do VBoxManage controlvm $vm savestate; done'
 alias vbox-delete-vms='for vm in `VBoxManage list vms | cut -d\" -f2`; do VBoxManage unregistervm $vm --delete; done'
 
-alias squid-purge-repodata="for url in \$(sudo cat /var/log/squid3/access.log | tail -n 100000 | grep repodata | awk '{print \$7}' | sort | uniq); do echo \$url; squidclient -m PURGE \$url; done"
-alias squid-purge-all="for url in \$(sudo cat /var/log/squid3/access.log | tail -n 100000 | grep http | awk '{print \$7}' | sort | uniq); do echo \$url; squidclient -m PURGE \$url; done"
+alias squid-purge-repodata="for url in \$(cat ~/Library/Logs/squid/squid-access.log | tail -n 100000 | grep repodata | awk '{print \$7}' | sort | uniq); do echo \$url; /usr/local/squid/bin/squidclient -m PURGE \$url; done"
+alias squid-purge-all="for url in \$(cat ~/Library/Logs/squid/squid-access.log | tail -n 100000 | grep http | awk '{print \$7}' | sort | uniq); do echo \$url; /usr/local/squid/bin/squidclient  -m PURGE \$url; done"
 
 # Serves a directory via HTTP.
 alias http-serve='python -m SimpleHTTPServer'
@@ -216,7 +216,7 @@ function vag-up-clean-snap {
 }
 
 function vag-up-prov-snap {
-    vagrant up $@ --no-provision && vagrant snap take $@
+    vagrant up $@ --provision && vagrant snap take $@
 }
 
 function vag-rb-provision {
@@ -227,6 +227,14 @@ function vag-rb-cukes {
     vagrant snap rollback $@ && vagrant cucumber
 }
 
+function vag-rb-clean {
+    vagrant snap rollback
+}
+
+function vag-up-cukes {
+    vagrant up $@ && vagrant cucumber
+}
+
 function vag-fuck-it {
     vagrant destroy -f $@ && vagrant up $@
 }
@@ -235,4 +243,28 @@ function vag-nuke {
     vagrant destroy -f $@
 }
 
+function vag-stat {
+    vagrant status $@
+}
 
+function set-current-feature-norb {
+    gsed -i '3i@current @norollback' $@
+}
+
+function set-current-feature-wtrb {
+    gsed -i '3i@current' $@
+}
+
+function del-current-feature {
+    gsed -i '3d' $@
+}
+
+function be {
+    bundle exec $@
+}
+
+#### GIT
+
+checkout-pr () {
+    git fetch origin pull/$1/head:pr-$1 && git checkout pr-$1;
+}
