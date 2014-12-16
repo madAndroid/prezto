@@ -266,7 +266,7 @@ function vag-up-clean-snap {
 }
 
 function vag-up-prov-snap {
-    vagrant up $@ --no-provision && vagrant snap take $@
+    vagrant up $@ --provision && vagrant snap take $@
 }
 
 function vag-rb-provision {
@@ -277,6 +277,14 @@ function vag-rb-cukes {
     vagrant snap rollback $@ && vagrant cucumber
 }
 
+function vag-rb-clean {
+    vagrant snap rollback
+}
+
+function vag-up-cukes {
+    vagrant up $@ && vagrant cucumber
+}
+
 function vag-fuck-it {
     vagrant destroy -f $@ && vagrant up $@
 }
@@ -285,4 +293,28 @@ function vag-nuke {
     vagrant destroy -f $@
 }
 
+function vag-stat {
+    vagrant status $@
+}
 
+function set-current-feature-norb {
+    gsed -i '3i@current @norollback' $@
+}
+
+function set-current-feature-wtrb {
+    gsed -i '3i@current' $@
+}
+
+function del-current-feature {
+    gsed -i '3d' $@
+}
+
+function be {
+    bundle exec $@
+}
+
+#### GIT
+
+checkout-pr () {
+    git fetch origin pull/$1/head:pr-$1 && git checkout pr-$1;
+}
