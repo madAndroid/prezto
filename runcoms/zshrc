@@ -87,7 +87,10 @@ eval "$(direnv hook zsh)"
 
 # Enable dirhistory:
 # (see http://zsh.sourceforge.net/Intro/intro_6.html)
-
 DIRSTACKSIZE=8
 setopt autopushd pushdminus pushdsilent pushdtohome
 alias dh='dirs -v'
+
+### Set HOME/END keys:
+bindkey "^[[1~" beginning-of-line
+bindkey "^[[4~" end-of-line
