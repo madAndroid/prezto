@@ -293,6 +293,12 @@ function vag-nuke {
     vagrant destroy -f $@
 }
 
+function vag-global-nuke {
+    for box in $(vagrant global-status | egrep -e 'running|poweroff'| cut -d' ' -f1); do 
+        vagrant destroy -f $box
+    done
+}
+
 function vag-stat {
     vagrant status $@
 }
@@ -311,6 +317,10 @@ function del-current-feature {
 
 function be {
     bundle exec $@
+}
+
+function del-known-host {
+    gsed -i -e "$1 d" $HOME/.ssh/known_hosts
 }
 
 #### GIT
