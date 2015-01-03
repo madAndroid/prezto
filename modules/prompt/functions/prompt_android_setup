@@ -79,7 +79,7 @@ function prompt_android_setup {
   if [[ `hostname` =~ 'Andrews-MacBook-Pro*' ]]; then
     PROMPT='%F{cyan}${_prompt_android_pwd}%f${git_info:+${(e)git_info[prompt]}}%(!.%B%F{red}#%f%b.)${editor_info[overwrite]}%(?:: %F{red}⏎%f)${VIM:+" %B%F{green}V%f%b"} ${git_info[rprompt]}${editor_info[keymap]} '
   else
-    PROMPT='%F{cyan} %m ${_prompt_android_pwd}%f${git_info:+${(e)git_info[prompt]}}%(!.%B%F{red}#%f%b.)${editor_info[overwrite]}%(?:: %F{red}⏎%f)${VIM:+" %B%F{green}V%f%b"} ${git_info[rprompt]}${editor_info[keymap]} '
+    PROMPT='%F{yellow} %m %F{cyan}${_prompt_android_pwd}%f${git_info:+${(e)git_info[prompt]}}%(!.%B%F{red}#%f%b.)${editor_info[overwrite]}%(?:: %F{red}⏎%f)${VIM:+" %B%F{green}V%f%b"} ${git_info[rprompt]}${editor_info[keymap]} '
   fi
 #  RPROMPT='${editor_info[overwrite]}%(?:: %F{red}⏎%f)${VIM:+" %B%F{green}V%f%b"}${git_info[rprompt]}'
   SPROMPT='zsh: correct %F{red}%R%f to %F{green}%r%f [nyae]? '
