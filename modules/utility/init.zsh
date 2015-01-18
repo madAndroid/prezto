@@ -293,10 +293,14 @@ function vag-nuke {
     vagrant destroy -f $@
 }
 
-function vag-global-nuke {
+function vag-glob-nuke {
     for box in $(vagrant global-status | egrep -e 'running|poweroff'| cut -d' ' -f1); do 
         vagrant destroy -f $box
     done
+}
+
+function vag-glob-stat {
+    vagrant global-status
 }
 
 function vag-stat {
