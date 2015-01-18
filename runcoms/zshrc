@@ -80,7 +80,10 @@ S3CMD_CONFIGFILE=$(eval $S3CMD_CONFIGFILE)
 
 export EDITOR='vim'
 
-eval "$(direnv hook zsh)"
+### Initialize direnv, if it's installed
+if [[ -x /usr/local/bin/direnv ]]; then
+    eval "$(direnv hook zsh)"
+fi
 
 #autoload -U tetris ; zle -N tetris ; bindkey '...' tetris
 
