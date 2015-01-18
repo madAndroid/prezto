@@ -235,7 +235,7 @@ export TERM='xterm'
 #export TERM=screen-256color-bce
 
 # Auto start a session when Zsh is launched.
-if [[ `hostname` =~ 'Andrews-MacBook-Pro*' ]]; then
+if [[ `hostname` =~ 'Andrews-M*' ]]; then
   zstyle ':prezto:module:tmux' prompt-start 'yes'
 else
   zstyle ':prezto:module:tmux' prompt-resume 'yes'
