@@ -26,8 +26,8 @@ zstyle ':prezto:*:*' color 'yes'
 zstyle ':prezto:load' pmodule \
   'environment' \
   'editor' \
-  'tmux' \
   'ssh' \
+  'tmux' \
   'history' \
   'directory' \
   'spectrum' \
