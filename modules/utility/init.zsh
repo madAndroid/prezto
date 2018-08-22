@@ -326,9 +326,3 @@ function be {
 function del-known-host {
     gsed -i -e "$1 d" $HOME/.ssh/known_hosts
 }
-
-#### GIT
-
-checkout-pr () {
-    git fetch origin pull/$1/head:pr-$1 && git checkout pr-$1;
-}

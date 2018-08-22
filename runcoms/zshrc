@@ -13,16 +13,43 @@ fi
 # Customize to your needs...
 
 title() {
-    if [ $STY ]; then
-        echo -ne "\033 k$1\033\\" 
-    elif [ $TMUX ]; then
-        if [ $# -gt 1 ]; then
-            tmux rename-window -t $1 $2
-        else
-            tmux rename-window $1
-        fi
+  if [ $STY ]; then
+    echo -ne "\033 k$1\033\\" 
+  elif [ $TMUX ]; then
+    if [ $# -gt 1 ]; then
+      tmux rename-window -t $1 $2
+    else
+      tmux rename-window $1
     fi
+  fi
 }
+
+#PR_TITLEBAR=''
+
+# $1 = type; 0 - both, 1 - tab, 2 - title
+# rest = text
+setTerminalText () {
+  # echo works in bash & zsh
+  local mode=$1 ; shift
+  echo -ne "\033]$mode;$@\007"
+}
+
+iterm_title () {
+  tab_label=${PWD/${HOME}/\~} # use 'relative' path
+  echo -ne "\e]2;${tab_label}\a" # set window title to full string
+  echo -ne "\e]1;${tab_label: -24}\a" # set tab title to rightmost 24 characters
+}
+
+stt_both  () { setTerminalText 0 $@; }
+stt_tab   () { setTerminalText 1 $@; }
+stt_title () { setTerminalText 2 $@; }
+
+add-zsh-hook precmd stt_both
+add-zsh-hook precmd stt_tab
+add-zsh-hook precmd stt_title
+add-zsh-hook precmd iterm_title
+
+source ~/bin/tmuxinator.zsh
 
 ### AWS-fu
 #
@@ -50,8 +77,8 @@ export EC2_REGION=eu-west-1
 [ -f /usr/local/bin/aws_zsh_completer.sh ] && source /usr/local/bin/aws_zsh_completer.sh
 
 for i in $EC2_HOME $AWS_IAM_HOME $AWS_RDS_HOME $AWS_ELB_HOME $AWS_CLOUDFORMATION_HOME $AWS_AUTO_SCALING_HOME $CS_HOME $AWS_CLOUDWATCH_HOME $AWS_ELASTICACHE_HOME $AWS_SNS_HOME $AWS_ROUTE53_HOME $AWS_CLOUDFRONT_HOME /usr/local/aws/s3
-    do
-        PATH=$i/bin:$PATH
+do
+  PATH=$i/bin:$PATH
 done
 
 PATH=/usr/local/aws/elasticbeanstalk/eb/linux/python2.7:$PATH
@@ -70,9 +97,7 @@ alias vless=$PAGER
 
 alias rauns="reattach-to-user-namespace -l zsh"
 
-del_known_host() {
-    sed -i -e "$1 d" /home/andrew/.ssh/known_hosts
-}
+alias vagrant="/opt/vagrant/bin/vagrant"
 
 S3CMD_CONFIGFILE=$(eval $S3CMD_CONFIGFILE)
 
@@ -80,9 +105,13 @@ S3CMD_CONFIGFILE=$(eval $S3CMD_CONFIGFILE)
 
 export EDITOR='vim'
 
+## Set GOPATH
+export GOPATH=$HOME/golang
+PATH=$GOPATH/bin:$PATH
+
 ### Initialize direnv, if it's installed
 if [[ -x /usr/local/bin/direnv ]]; then
-    eval "$(direnv hook zsh)"
+  eval "$(direnv hook zsh)"
 fi
 
 #autoload -U tetris ; zle -N tetris ; bindkey '...' tetris
@@ -98,3 +127,220 @@ alias dh='dirs -v'
 ### Set HOME/END keys:
 bindkey "^[[1~" beginning-of-line
 bindkey "^[[4~" end-of-line
+
+# Miscellaneous
+
+# Vagrant:
+#alias vagrant-up-snap='vagrant up --no-provision && vagrant snap take'
+#alias vagrant-rollback-provision='vagrant snap rollback && vagrant provision'
+#alias vagrant-fuck-it='vagrant destroy -f && vagrant up'
+
+# Vbox:
+alias vbox-ls-vms='VBoxManage list vms'
+alias vbox-ls-vm-state='for vm in `VBoxManage list vms | cut -d\" -f2`; do echo $vm && VBoxManage showvminfo $vm --machinereadable | grep VMState=; done'
+alias vbox-shutdown-vms='for vm in `VBoxManage list vms | cut -d\" -f2`; do VBoxManage controlvm $vm savestate; done'
+alias vbox-delete-vms='for vm in `VBoxManage list vms | cut -d\" -f2`; do VBoxManage unregistervm $vm --delete; done'
+
+alias squid-purge-repodata="for url in \$(cat ~/Library/Logs/squid/squid-access.log | tail -n 100000 | grep repodata | awk '{print \$7}' | sort | uniq); do echo \$url; /usr/local/squid/bin/squidclient -m PURGE \$url; done"
+alias squid-purge-all="for url in \$(cat ~/Library/Logs/squid/squid-access.log | tail -n 100000 | grep http | awk '{print \$7}' | sort | uniq); do echo \$url; /usr/local/squid/bin/squidclient  -m PURGE \$url; done"
+
+# Serves a directory via HTTP.
+alias http-serve='python -m SimpleHTTPServer'
+
+# Apt:
+#alias purge-kernels="sudo apt-get remove --purge $(dpkg -l 'linux-*' | sed '/^ii/!d;/'"$(uname -r | sed "s/\(.*\)-\([^0-9]\+\)/\1/")"'/d;s/^[^ ]* [^ ]* \([^ ]*\).*/\1/;/[0-9]/!d')"
+
+#
+# Functions
+#
+
+# Makes a directory and changes to it.
+function mkdcd {
+  [[ -n "$1" ]] && mkdir -p "$1" && builtin cd "$1"
+}
+
+# Changes to a directory and lists its contents.
+function cdls {
+  builtin cd "$argv[-1]" && ls "${(@)argv[1,-2]}"
+}
+
+# Pushes an entry onto the directory stack and lists its contents.
+function pushdls {
+  builtin pushd "$argv[-1]" && ls "${(@)argv[1,-2]}"
+}
+
+# Pops an entry off the directory stack and lists its contents.
+function popdls {
+  builtin popd "$argv[-1]" && ls "${(@)argv[1,-2]}"
+}
+
+# Prints columns 1 2 3 ... n.
+function slit {
+  awk "{ print ${(j:,:):-\$${^@}} }"
+}
+
+# Finds files and executes a command on them.
+function find-exec {
+  find . -type f -iname "*${1:-}*" -exec "${2:-file}" '{}' \;
+}
+
+# Displays user owned processes status.
+function psu {
+  ps -U "${1:-$USER}" -o 'pid,%cpu,%mem,command' "${(@)argv[2,-1]}"
+}
+
+# Vagrant:
+function vag-up-clean-snap {
+  vagrant up $@ --no-provision && vagrant snap take $@
+}
+
+function vag-up-prov-snap {
+  vagrant up $@ --provision && vagrant snap take $@
+}
+
+function vag-rb-provision {
+  vagrant snap rollback $@ && vagrant provision $@
+}
+
+function vag-rb-cukes {
+  vagrant snap rollback $@ && vagrant cucumber
+}
+
+function vag-rb-clean {
+  vagrant snap rollback
+}
+
+function vag-up-cukes {
+  vagrant up $@ && vagrant cucumber
+}
+
+function vag-fuck-it {
+  vagrant destroy -f $@ && vagrant up $@
+}
+
+function vag-cuke-fuck-it {
+  vagrant destroy -f $@ && vagrant up $@ && vagrant cucumber
+}
+
+function vag-prov {
+  vagrant provision $@
+}
+
+function vag-nuke {
+  vagrant destroy -f $@
+}
+
+function vag-glob-nuke {
+  for box in $(vagrant global-status | egrep -e 'running|poweroff'| cut -d' ' -f1); do 
+    vagrant destroy -f $box
+  done
+}
+
+function vag-glob-stat {
+  vagrant global-status
+}
+
+function vag-stat {
+  vagrant status $@
+}
+
+function set-current-feature-norb {
+  gsed -i '3i@current @norollback' $@
+}
+
+function set-current-feature-wtrb {
+  gsed -i '3i@current' $@
+}
+
+function del-current-feature {
+  gsed -i '3d' $@
+}
+
+function be {
+  bundle exec $@
+}
+
+function bi {
+  bundle install
+}
+
+function bu {
+  bundle update
+}
+
+function del-known-host {
+  sed -i -e "$1 d" $HOME/.ssh/known_hosts
+}
+
+function kill-ssh-sessions {
+  for ps in $(ps aux | grep \[s\]sh | awk '{ print $2 }'); do kill $ps; done
+}
+
+function git-clean-uncommitted {
+  for f in $(git s | grep '??' | awk '{print $2}'); do echo $f; rm -Rfv $f; done
+}
+
+function awsenv {
+
+  profile=$1
+
+  ak=$(cat ~/.aws/credentials|grep -A 2 $profile|grep aws_access_key|cut -d'=' -f 2 | tr -d '[:blank:]')
+  sk=$(cat ~/.aws/credentials|grep -A 3 $profile|grep aws_secret_access_key|cut -d '=' -f 2 | tr -d '[:blank:]')
+
+  echo
+  echo export AWS_ACCESS_KEY_ID=$ak
+  echo export AWS_SECRET_ACCESS_KEY=$sk
+  echo
+
+}
+
+# Custom SLACK update status function
+
+function slack-status {
+
+    local SLACK_TOKEN="xxx"
+    local STATUS=${1:-""}
+    local EMOJI=${2:-"itv"}
+    local data='{"status_text":"'$STATUS'","status_emoji":":'$EMOJI':"}'
+
+    curl -s -o /dev/null https://slack.com/api/users.profile.set -X POST -H "Content-type: application/x-www-form-urlencoded" -d "token=${SLACK_TOKEN}&profile=$data"
+
+}
+
+#### GIT
+
+checkout-pr () {
+  git fetch origin pull/$1/head:pr-$1 && git checkout pr-$1;
+}
+
+export DISABLE_AUTO_TITLE=true
+
+### Stop java from creating dock icon:
+export JAVA_TOOL_OPTIONS="-Dapple.awt.UIElement=true"
+
+GPG_TTY=$(tty)
+export GPG_TTY
+
+#GPG_CONF="\$HOME/.gpg-agent-info"
+#if [ -e "\$GPG_CONF" ]; then
+#    source "\$GPG_CONF"
+#    export GPG_AGENT_INFO
+#    export SSH_AUTH_SOCK
+#    export SSH_AGENT_PID
+#fi
+
+#/usr/local/MacGPG2/bin/gpg-connect-agent killagent /bye
+
+eval $(/usr/local/MacGPG2/bin/gpg-agent --daemon)
+
+source ~/.gpg-agent-info
+export GPG_AGENT_INFO
+export SSH_AGENT_PID
+export SSH_AUTH_SOCK
+
+gpg-connect-agent updatestartuptty /bye
+
+#ssh -T git@github.com
+#eval $(/usr/local/bin/gpg-agent --daemon)
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
