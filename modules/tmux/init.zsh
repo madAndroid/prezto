@@ -24,17 +24,36 @@ function prompt_for_tmux_start {
   select yn in "Yes" "No"; do
     case $yn in
       Yes)
-        echo "starting tmux"
-        tmux -u start-server
+        echo "---  ***  ***  *** --- "
+        echo "start via tmuxinator?"
+        select yn in "Yes" "No"; do
+          case $yn in
+            Yes)
+              echo "listing tmuxinator saved sessions"
+              tmuxinator list
 
-        DEFAULT_SESSION="tmux-$$"
-        vared -p "Session: " DEFAULT_SESSION
-        tmux_session="$DEFAULT_SESSION"
-        tmux \
-            new-session -d -s "$tmux_session" \; \
-            set-option -t "$tmux_session" destroy-unattached off &> /dev/null
-        exec tmux attach-session
+              DEFAULT_SESSION="default"
+              vared -p "Session: " DEFAULT_SESSION
+              tmuxinator_session="$DEFAULT_SESSION"
+              exec tmuxinator start "$tmuxinator_session"
+              break
+            ;;
+            No)
+              echo "starting tmux"
+              tmux -u start-server
 
+              DEFAULT_SESSION="tmux-$$"
+              vared -p "Session: " DEFAULT_SESSION
+              tmux_session="$DEFAULT_SESSION"
+              tmux \
+                  new-session -d -s "$tmux_session" \; \
+                  set-option -t "$tmux_session" destroy-unattached off &> /dev/null
+              exec tmux attach-session
+              break
+            ;;
+            *) break ;;
+          esac
+        done
       ;;
       No)
         echo "not starting tmux"
@@ -49,30 +68,13 @@ function prompt_for_tmux_start {
 function prompt_for_tmux_resume {
 
   echo "---  ***  ***  *** --- "
-  echo "Existing tmux session found: resume last session?"
+  echo "Existing tmux session found: resume session?"
   select yn in "Yes" "No"; do
     case $yn in
       Yes)
-        # if ssh auth variable is missing
-        if [ -z "$SSH_AUTH_SOCK" ]; then
-          export SSH_AUTH_SOCK="${TMPDIR:-/tmp}/ssh-agent.sock"
-        fi
 
-        # if socket is available create the new auth session
-        if [ ! -S "$SSH_AUTH_SOCK" ]; then
-          `ssh-agent -a $SSH_AUTH_SOCK` > /dev/null >&1
-          echo $SSH_AGENT_PID > $HOME/.ssh/.auth_pid
-        fi
-
-        # if agent isn't defined, recreate it from pid file
-        if [ -z $SSH_AGENT_PID ]; then
-          export SSH_AGENT_PID=`cat $HOME/.ssh/.auth_pid`
-        fi
-
-        # Add all default keys to ssh auth
-        ssh-add 2>/dev/null
-
-        exec tmux attach-session
+        tmux attach \; choose-session
+        break
       ;;
       No) return 1 && break ;;
       *) return 1 && break ;;

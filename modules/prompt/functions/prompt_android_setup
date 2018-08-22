@@ -49,7 +49,7 @@ function prompt_android_setup {
   zstyle ':prezto:module:git:info' verbose 'yes'
 
   zstyle ':prezto:module:editor:info:completing' format '%B%F{red}...%f%b'
-  if [[ `hostname` =~ 'Andrews-M*' ]]; then
+  if [[ `hostname` =~ 'Andrew*' ]]; then
     zstyle ':prezto:module:editor:info:keymap:primary' format ' %B%F{blue}❯%F{green}❯%F{blue}❯%F{green}❯%f%b'
   else
     zstyle ':prezto:module:editor:info:keymap:primary' format ' %B%F{blue}❯%F{blue}❯%F{blue}❯%f%b'
@@ -76,7 +76,7 @@ function prompt_android_setup {
 
   # Define prompts.
 
-  if [[ `hostname` =~ 'Andrews-M*' ]]; then
+  if [[ `hostname` =~ 'Andrew*' ]]; then
     PROMPT='%F{cyan}${_prompt_android_pwd}%f${git_info:+${(e)git_info[prompt]}}%(!.%B%F{red}#%f%b.)${editor_info[overwrite]}%(?:: %F{red}⏎%f)${VIM:+" %B%F{green}V%f%b"} ${git_info[rprompt]}${editor_info[keymap]} '
   else
     PROMPT='%F{yellow} %m %F{cyan}${_prompt_android_pwd}%f${git_info:+${(e)git_info[prompt]}}%(!.%B%F{red}#%f%b.)${editor_info[overwrite]}%(?:: %F{red}⏎%f)${VIM:+" %B%F{green}V%f%b"} ${git_info[rprompt]}${editor_info[keymap]} '

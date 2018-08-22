@@ -330,8 +330,11 @@ function del-known-host {
     gsed -i -e "$1 d" $HOME/.ssh/known_hosts
 }
 
-#### GIT
+#if (( $+commands[htop] )); then
+#  alias top=htop
+#else
+#  alias topc='top -o cpu'
+#  alias topm='top -o vsize'
+#fi
 
-checkout-pr () {
-    git fetch origin pull/$1/head:pr-$1 && git checkout pr-$1;
-}
+

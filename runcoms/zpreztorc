@@ -29,17 +29,19 @@ zstyle ':prezto:*:*' color 'yes'
 zstyle ':prezto:load' pmodule \
   'environment' \
   'editor' \
-  'ssh' \
-  'tmux' \
   'history' \
   'directory' \
   'spectrum' \
   'utility' \
   'completion' \
+  'ssh' \
   'git' \
   'python' \
   'puppet' \
   'ruby' \
+  'osx' \
+  'tmux' \
+  'terminal' \
   'rsync' \
   'gnu-utility' \
   'prompt'
@@ -154,12 +156,12 @@ zstyle ':prezto:module:prompt' theme 'android'
 
 #export TERM='xterm'
 #
-## Auto start a session when Zsh is launched.
+# Auto start a session when Zsh is launched.
 #if [[ `hostname` == 'AS-ThinkPad-X201' ]]; then
 #  zstyle ':prezto:module:screen' prompt-start 'yes'
 #else
-#  zstyle ':prezto:module:screen' prompt-resume 'yes'
-#  zstyle ':prezto:module:screen' prompt-start 'yes'
+#zstyle ':prezto:module:screen' prompt-resume 'yes'
+#zstyle ':prezto:module:screen' prompt-start 'yes'
 #fi
 #zstyle ':prezto:module:screen' resume 'no'
 
@@ -235,7 +237,8 @@ export TERM='xterm'
 #export TERM=screen-256color-bce
 
 # Auto start a session when Zsh is launched.
-if [[ `hostname` =~ 'Andrews-M*' ]]; then
+if [[ `hostname` =~ 'Andrew*' ]]; then
+  zstyle ':prezto:module:tmux' prompt-resume 'yes'
   zstyle ':prezto:module:tmux' prompt-start 'yes'
 else
   zstyle ':prezto:module:tmux' prompt-resume 'yes'
