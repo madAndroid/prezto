@@ -76,14 +76,14 @@ export EC2_REGION=eu-west-1
 ### Source our AWS completion fu if it's available
 [ -f /usr/local/bin/aws_zsh_completer.sh ] && source /usr/local/bin/aws_zsh_completer.sh
 
-for i in $EC2_HOME $AWS_IAM_HOME $AWS_RDS_HOME $AWS_ELB_HOME $AWS_CLOUDFORMATION_HOME $AWS_AUTO_SCALING_HOME $CS_HOME $AWS_CLOUDWATCH_HOME $AWS_ELASTICACHE_HOME $AWS_SNS_HOME $AWS_ROUTE53_HOME $AWS_CLOUDFRONT_HOME /usr/local/aws/s3
-do
-  PATH=$i/bin:$PATH
-done
+#for i in $EC2_HOME $AWS_IAM_HOME $AWS_RDS_HOME $AWS_ELB_HOME $AWS_CLOUDFORMATION_HOME $AWS_AUTO_SCALING_HOME $CS_HOME $AWS_CLOUDWATCH_HOME $AWS_ELASTICACHE_HOME $AWS_SNS_HOME $AWS_ROUTE53_HOME $AWS_CLOUDFRONT_HOME /usr/local/aws/s3
+#do
+#  PATH=$i/bin:$PATH
+#done
 
-PATH=/usr/local/aws/elasticbeanstalk/eb/linux/python2.7:$PATH
-PATH=/usr/local/aws/elasticmapreduce:$PATH
-PATH=/usr/local/aws/datapipeline:$PATH
+#PATH=/usr/local/aws/elasticbeanstalk/eb/linux/python2.7:$PATH
+#PATH=/usr/local/aws/elasticmapreduce:$PATH
+#PATH=/usr/local/aws/datapipeline:$PATH
 
 #export EC2_PRIVATE_KEY=$(echo $HOME/.aws-default/pk-*.pem)
 #export EC2_CERT=$(echo $HOME/.aws-default/cert-*.pem)
@@ -298,12 +298,12 @@ function awsenv {
 
 function slack-status {
 
-    local SLACK_TOKEN="xxx"
-    local STATUS=${1:-""}
-    local EMOJI=${2:-"itv"}
-    local data='{"status_text":"'$STATUS'","status_emoji":":'$EMOJI':"}'
+  local SLACK_TOKEN="xxx"
+  local STATUS=${1:-""}
+  local EMOJI=${2:-"itv"}
+  local data='{"status_text":"'$STATUS'","status_emoji":":'$EMOJI':"}'
 
-    curl -s -o /dev/null https://slack.com/api/users.profile.set -X POST -H "Content-type: application/x-www-form-urlencoded" -d "token=${SLACK_TOKEN}&profile=$data"
+  curl -s -o /dev/null https://slack.com/api/users.profile.set -X POST -H "Content-type: application/x-www-form-urlencoded" -d "token=${SLACK_TOKEN}&profile=$data"
 
 }
 
@@ -331,8 +331,8 @@ export GPG_TTY
 
 #/usr/local/MacGPG2/bin/gpg-connect-agent killagent /bye
 
-eval $(/usr/local/MacGPG2/bin/gpg-agent --daemon)
-
+#eval $(/usr/local/MacGPG2/bin/gpg-agent --daemon)
+#
 source ~/.gpg-agent-info
 export GPG_AGENT_INFO
 export SSH_AGENT_PID
@@ -344,3 +344,27 @@ gpg-connect-agent updatestartuptty /bye
 #eval $(/usr/local/bin/gpg-agent --daemon)
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '/Users/andrew/bin/google-cloud-sdk/path.zsh.inc' ]; then source '/Users/andrew/bin/google-cloud-sdk/path.zsh.inc'; fi
+
+# The next line enables shell command completion for gcloud.
+if [ -f '/Users/andrew/bin/google-cloud-sdk/completion.zsh.inc' ]; then source '/Users/andrew/bin/google-cloud-sdk/completion.zsh.inc'; fi
+
+### Kube context in PROMPT:
+source "${HOME}/bin/kube-ps1.sh"
+PROMPT='$(kube_ps1)'$PROMPT
+
+
+# get all services with in a cluster and the nodePorts they use (if any)
+#alias ksvc="kubectl get --all-namespaces svc -o json | jq -r '.items[] | [.metadata.name,([.spec.ports[].nodePort | tostring ] | join(\"|\"))] | @csv'"
+# shortcuts for frequent kubernetes commands
+alias kc="kubectl"
+alias kpods="kubectl get po -o wide"
+alias kget="kubectl get"
+alias ktx="kubectx"
+alias kns="kubens"
+alias kinspect="kubectl describe"
+function krun() { name=$1; shift; image=$1; shift; kubectl run -it --generator=run-pod/v1 --image $image $name -- $@; }
+function klogs() { kubectl logs $*;}
+function kexec(){ pod=$1; shift; kubectl exec -it $pod -- $@; }
