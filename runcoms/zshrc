@@ -92,8 +92,8 @@ export DATA_PIPELINE_CREDENTIALS=$HOME/.aws-default/aws-credentials.json
 
 export VIMPAGER_RC="~/.vimrc.less"
 #alias vless="vim -u ~/.vimrc.less "
-#alias less=$PAGER
-alias vless=$PAGER
+alias less=$PAGER
+#alias vless=$PAGER
 
 alias rauns="reattach-to-user-namespace -l zsh"
 
@@ -333,12 +333,12 @@ export GPG_TTY
 
 #eval $(/usr/local/MacGPG2/bin/gpg-agent --daemon)
 #
-source ~/.gpg-agent-info
-export GPG_AGENT_INFO
-export SSH_AGENT_PID
-export SSH_AUTH_SOCK
-
-gpg-connect-agent updatestartuptty /bye
+#source ~/.gpg-agent-info
+#export GPG_AGENT_INFO
+#export SSH_AGENT_PID
+#export SSH_AUTH_SOCK
+#
+#gpg-connect-agent updatestartuptty /bye
 
 #ssh -T git@github.com
 #eval $(/usr/local/bin/gpg-agent --daemon)
