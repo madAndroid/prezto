@@ -361,6 +361,8 @@ PROMPT='$(kube_ps1)'$PROMPT
 # shortcuts for frequent kubernetes commands
 alias kc="kubectl"
 alias kpods="kubectl get po -o wide"
+alias knodes="kubectl get nodes -o wide"
+alias knodesort="kubectl get nodes --sort-by=\".status.conditions[?(@.reason == 'KubeletReady' )].lastTransitionTime\""
 alias kget="kubectl get"
 alias ktx="kubectx"
 alias kns="kubens"
@@ -368,3 +370,7 @@ alias kinspect="kubectl describe"
 function krun() { name=$1; shift; image=$1; shift; kubectl run -it --generator=run-pod/v1 --image $image $name -- $@; }
 function klogs() { kubectl logs $*;}
 function kexec(){ pod=$1; shift; kubectl exec -it $pod -- $@; }
+
+source <(kubectl completion zsh)
+
+export PATH="/usr/local/Cellar/gnu-getopt/1.1.6/bin":$PATH
