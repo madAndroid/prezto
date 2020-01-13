@@ -5,6 +5,10 @@
 #   Sorin Ionescu <sorin.ionescu@gmail.com>
 #
 
+if type brew &>/dev/null; then
+  FPATH=$(brew --prefix)/share/zsh/site-functions:$FPATH
+fi
+
 # Source Prezto.
 if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then
   source "${ZDOTDIR:-$HOME}/.zprezto/init.zsh"
@@ -14,7 +18,7 @@ fi
 
 title() {
   if [ $STY ]; then
-    echo -ne "\033 k$1\033\\" 
+    echo -ne "\033 k$1\033\\"
   elif [ $TMUX ]; then
     if [ $# -gt 1 ]; then
       tmux rename-window -t $1 $2
@@ -51,47 +55,14 @@ add-zsh-hook precmd iterm_title
 
 source ~/bin/tmuxinator.zsh
 
-### AWS-fu
-#
-export AWS_CONFIG_FILE='~/.aws/aws_cli_config'
 export JAVA_HOME=/usr
-export EC2_HOME=/usr/local/aws/ec2
-export AWS_IAM_HOME=/usr/local/aws/iam
-export AWS_RDS_HOME=/usr/local/aws/rds
-export AWS_ELB_HOME=/usr/local/aws/elb
-export AWS_CLOUDFORMATION_HOME=/usr/local/aws/cfn
-export AWS_AUTO_SCALING_HOME=/usr/local/aws/as
-export CS_HOME=/usr/local/aws/cloudsearch
-export AWS_CLOUDWATCH_HOME=/usr/local/aws/cloudwatch
-export AWS_ELASTICACHE_HOME=/usr/local/aws/elasticache
-export AWS_SNS_HOME=/usr/local/aws/sns
-export AWS_ROUTE53_HOME=/usr/local/aws/route53
-export AWS_CLOUDFRONT_HOME=/usr/local/aws/cloudfront
-export EC2_URL=https://ec2.eu-west-1.amazonaws.com
-export EC2_REGION=eu-west-1
-#export AWS_CREDENTIAL_FILE=$HOME/.aws-default/aws-credential-file.txt
-#export AWS_ACCESS_KEY=$(grep '^AWSAccessKeyId' "$AWS_CREDENTIAL_FILE" | cut -d= -f2)
-#export AWS_SECRET_KEY=$(grep '^AWSSecretKey'   "$AWS_CREDENTIAL_FILE" | cut -d= -f2)
 
 ### Source our AWS completion fu if it's available
 [ -f /usr/local/bin/aws_zsh_completer.sh ] && source /usr/local/bin/aws_zsh_completer.sh
 
-#for i in $EC2_HOME $AWS_IAM_HOME $AWS_RDS_HOME $AWS_ELB_HOME $AWS_CLOUDFORMATION_HOME $AWS_AUTO_SCALING_HOME $CS_HOME $AWS_CLOUDWATCH_HOME $AWS_ELASTICACHE_HOME $AWS_SNS_HOME $AWS_ROUTE53_HOME $AWS_CLOUDFRONT_HOME /usr/local/aws/s3
-#do
-#  PATH=$i/bin:$PATH
-#done
-
-#PATH=/usr/local/aws/elasticbeanstalk/eb/linux/python2.7:$PATH
-#PATH=/usr/local/aws/elasticmapreduce:$PATH
-#PATH=/usr/local/aws/datapipeline:$PATH
-
-#export EC2_PRIVATE_KEY=$(echo $HOME/.aws-default/pk-*.pem)
-#export EC2_CERT=$(echo $HOME/.aws-default/cert-*.pem)
-export ELASTIC_MAPREDUCE_CREDENTIALS=$HOME/.aws-default/aws-credentials.json
-export DATA_PIPELINE_CREDENTIALS=$HOME/.aws-default/aws-credentials.json
 
 export VIMPAGER_RC="~/.vimrc.less"
-#alias vless="vim -u ~/.vimrc.less "
+alias vless="vim -u ~/.vimrc.less"
 #alias less=$PAGER
 alias vless=$PAGER
 
@@ -231,7 +202,7 @@ function vag-nuke {
 }
 
 function vag-glob-nuke {
-  for box in $(vagrant global-status | egrep -e 'running|poweroff'| cut -d' ' -f1); do 
+  for box in $(vagrant global-status | egrep -e 'running|poweroff'| cut -d' ' -f1); do
     vagrant destroy -f $box
   done
 }
@@ -278,6 +249,10 @@ function kill-ssh-sessions {
 
 function git-clean-uncommitted {
   for f in $(git s | grep '??' | awk '{print $2}'); do echo $f; rm -Rfv $f; done
+}
+
+function git-update-master {
+  git co master && git pull && git co -
 }
 
 function awsenv {
@@ -332,7 +307,7 @@ export GPG_TTY
 #/usr/local/MacGPG2/bin/gpg-connect-agent killagent /bye
 
 #eval $(/usr/local/MacGPG2/bin/gpg-agent --daemon)
-#
+
 source ~/.gpg-agent-info
 export GPG_AGENT_INFO
 export SSH_AGENT_PID
@@ -360,17 +335,52 @@ PROMPT='$(kube_ps1)'$PROMPT
 #alias ksvc="kubectl get --all-namespaces svc -o json | jq -r '.items[] | [.metadata.name,([.spec.ports[].nodePort | tostring ] | join(\"|\"))] | @csv'"
 # shortcuts for frequent kubernetes commands
 alias kc="kubectl"
-alias kpods="kubectl get po -o wide"
+alias kpods="kubectl get po -o wide --sort-by=.status.startTime"
+alias kpodsort="kubectl get po -o wide --sort-by=.status.startTime"
 alias knodes="kubectl get nodes -o wide"
-alias knodesort="kubectl get nodes --sort-by=\".status.conditions[?(@.reason == 'KubeletReady' )].lastTransitionTime\""
+alias knodesort="kubectl get nodes -o wide --sort-by=\".status.conditions[?(@.reason == 'KubeletReady' )].lastTransitionTime\""
 alias kget="kubectl get"
 alias ktx="kubectx"
 alias kns="kubens"
-alias kinspect="kubectl describe"
+alias kdesc="kubectl describe"
 function krun() { name=$1; shift; image=$1; shift; kubectl run -it --generator=run-pod/v1 --image $image $name -- $@; }
 function klogs() { kubectl logs $*;}
 function kexec(){ pod=$1; shift; kubectl exec -it $pod -- $@; }
 
+function kpodbash(){
+  pod=$1
+  container=$2
+  if [ -n "${container}" ]; then
+    kubectl exec -it $pod -c $container -- bash
+  else
+    kubectl exec -it $pod -- bash
+  fi
+}
+
 source <(kubectl completion zsh)
 
-export PATH="/usr/local/Cellar/gnu-getopt/1.1.6/bin":$PATH
+function hub-create-draft() {
+  hub pull-request --draft
+}
+
+function unset_aws_env(){
+  unset AWS_SECRET_ACCESS_KEY
+  unset AWS_ACCESS_KEY_ID
+  unset AWS_SESSION_TOKEN
+  unset AWS_SECURITY_TOKEN
+  unset AWS_DEFAULT_REGION
+  unset AWS_REGION
+  unset AWS_PROFILE
+}
+
+function assumeRole {
+  eval $(command assume-role -duration 3h $@)
+  aws sts get-caller-identity
+}
+
+export PATH="/usr/local/Cellar/gnu-getopt/2.33.2/bin":$PATH
+
+. /usr/local/opt/asdf/asdf.sh
+. /usr/local/opt/asdf/etc/bash_completion.d/asdf.bash
+
+source /Users/andrew/Library/Preferences/org.dystroy.broot/launcher/bash/br
