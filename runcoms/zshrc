@@ -306,7 +306,10 @@ export GPG_TTY
 
 #eval $(/usr/local/MacGPG2/bin/gpg-agent --daemon)
 
-source ~/.gpg-agent-info
+if [ -f ~/.gpg-agent-info ]; then
+  source ~/.gpg-agent-info
+fi
+
 export GPG_AGENT_INFO
 export SSH_AGENT_PID
 export SSH_AUTH_SOCK
@@ -328,6 +331,8 @@ if [ -f '/Users/andrew/bin/google-cloud-sdk/completion.zsh.inc' ]; then source '
 source "${HOME}/bin/kube-ps1.sh"
 PROMPT='$(kube_ps1)'$PROMPT
 
+. $HOME/.asdf/asdf.sh
+. $HOME/.asdf/completions/asdf.bash
 
 # get all services with in a cluster and the nodePorts they use (if any)
 #alias ksvc="kubectl get --all-namespaces svc -o json | jq -r '.items[] | [.metadata.name,([.spec.ports[].nodePort | tostring ] | join(\"|\"))] | @csv'"
