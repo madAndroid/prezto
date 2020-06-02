@@ -84,7 +84,6 @@ unset path_file
 # Set the list of directories that Zsh searches for programs.
 path=(
   /usr/local/{bin,sbin}
-  /opt/otto
   /opt/packer
   /opt/terraform
   /usr/local/go/bin

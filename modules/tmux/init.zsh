@@ -24,36 +24,17 @@ function prompt_for_tmux_start {
   select yn in "Yes" "No"; do
     case $yn in
       Yes)
-        echo "---  ***  ***  *** --- "
-        echo "start via tmuxinator?"
-        select yn in "Yes" "No"; do
-          case $yn in
-            Yes)
-              echo "listing tmuxinator saved sessions"
-              tmuxinator list
+        echo "starting tmux"
+        tmux -u start-server
 
-              DEFAULT_SESSION="default"
-              vared -p "Session: " DEFAULT_SESSION
-              tmuxinator_session="$DEFAULT_SESSION"
-              exec tmuxinator start "$tmuxinator_session"
-              break
-            ;;
-            No)
-              echo "starting tmux"
-              tmux -u start-server
-
-              DEFAULT_SESSION="tmux-$$"
-              vared -p "Session: " DEFAULT_SESSION
-              tmux_session="$DEFAULT_SESSION"
-              tmux \
-                  new-session -d -s "$tmux_session" \; \
-                  set-option -t "$tmux_session" destroy-unattached off &> /dev/null
-              exec tmux attach-session
-              break
-            ;;
-            *) break ;;
-          esac
-        done
+        DEFAULT_SESSION="default"
+        vared -p "Session: " DEFAULT_SESSION
+        tmux_session="$DEFAULT_SESSION"
+        tmux \
+            new-session -d -s "$tmux_session" \; \
+            set-option -t "$tmux_session" destroy-unattached off &> /dev/null
+        exec tmux attach-session
+        break
       ;;
       No)
         echo "not starting tmux"

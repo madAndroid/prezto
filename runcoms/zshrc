@@ -87,8 +87,6 @@ fi
 
 #autoload -U tetris ; zle -N tetris ; bindkey '...' tetris
 
-#PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
-
 # Enable dirhistory:
 # (see http://zsh.sourceforge.net/Intro/intro_6.html)
 DIRSTACKSIZE=8
@@ -337,8 +335,8 @@ PROMPT='$(kube_ps1)'$PROMPT
 alias kc="kubectl"
 alias kpods="kubectl get po -o wide --sort-by=.status.startTime"
 alias kpodsort="kubectl get po -o wide --sort-by=.status.startTime"
-alias knodes="kubectl get nodes -o wide"
-alias knodesort="kubectl get nodes -o wide --sort-by=\".status.conditions[?(@.reason == 'KubeletReady' )].lastTransitionTime\""
+## alias knodes="kubectl get nodes -o wide"
+alias knodes="kubectl get nodes -o wide --sort-by=\".status.conditions[?(@.reason == 'KubeletReady' )].lastTransitionTime\""
 alias kget="kubectl get"
 alias ktx="kubectx"
 alias kns="kubens"
@@ -374,7 +372,8 @@ function unset_aws_env(){
 }
 
 function assumeRole {
-  eval $(command assume-role -duration 3h $@)
+  #eval $(command assume-role -duration 180m $@)
+  eval $(command assume-role -duration 60m $@)
   aws sts get-caller-identity
 }
 
@@ -382,5 +381,3 @@ export PATH="/usr/local/Cellar/gnu-getopt/2.33.2/bin":$PATH
 
 . /usr/local/opt/asdf/asdf.sh
 . /usr/local/opt/asdf/etc/bash_completion.d/asdf.bash
-
-source /Users/andrew/Library/Preferences/org.dystroy.broot/launcher/bash/br

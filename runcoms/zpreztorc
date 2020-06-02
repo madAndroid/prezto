@@ -36,9 +36,6 @@ zstyle ':prezto:load' pmodule \
   'completion' \
   'ssh' \
   'git' \
-  'python' \
-  'puppet' \
-  'ruby' \
   'osx' \
   'tmux' \
   'terminal' \
